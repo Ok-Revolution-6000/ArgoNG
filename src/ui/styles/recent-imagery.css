@@ -25,7 +25,7 @@
   inset: -18px;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 212, 255, 0.16) 0%,
+    var(--color-accent-dim) 0%,
     transparent 65%
   );
   filter: blur(16px);
@@ -47,7 +47,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 212, 255, 0.46) transparent;
+  scrollbar-color: var(--color-accent) transparent;
 }
 #recent-imagery-panel.collapsed #recent-imagery-panel-body,
 #recent-imagery-panel.collapsed #recent-imagery-panel-count,
@@ -198,9 +198,9 @@
   grid-template-rows: 42px 13px 11px 11px 18px;
   row-gap: 2px;
   padding: 3px 2px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-line);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--color-ink) 3%, transparent);
   color: var(--text-secondary);
   cursor: pointer;
   scroll-snap-align: start;
@@ -227,10 +227,10 @@
   place-items: center;
   overflow: hidden;
   border-radius: 4px;
-  background: rgba(120, 130, 140, 0.18);
+  background: var(--color-accent-dim);
 }
 .recent-imagery-readout .ri-thumb[data-status='empty'] {
-  background: rgba(90, 96, 104, 0.22);
+  background: color-mix(in srgb, var(--color-ink) 22%, transparent);
 }
 .recent-imagery-readout .ri-thumb-img {
   width: 100%;
@@ -248,7 +248,7 @@
   position: absolute;
   padding: 0 4px;
   border-radius: 3px;
-  background: rgba(4, 17, 27, 0.9);
+  background: var(--color-bg);
   font-size: 7px;
   font-weight: 700;
   line-height: 12px;
@@ -321,7 +321,7 @@
 .recent-imagery-readout .ri-slot-tag {
   height: 16px;
   line-height: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--color-line);
   border-radius: 3px;
   text-align: center;
   font-size: 8px;
@@ -429,7 +429,7 @@ body.gev-imagery-box .cesium-widget canvas {
   z-index: 130;
   width: 1px;
   pointer-events: none;
-  background: rgba(218, 241, 247, 0.76);
+  background: var(--color-accent-dim);
   box-shadow: 0 0 12px rgba(94, 216, 239, 0.72);
 }
 #recent-imagery-split-line span {
@@ -437,8 +437,8 @@ body.gev-imagery-box .cesium-widget canvas {
   top: 14px;
   padding: 2px 6px;
   border-radius: 3px;
-  background: rgba(4, 17, 27, 0.82);
-  color: rgba(239, 247, 249, 0.92);
+  background: var(--color-bg);
+  color: var(--color-ink);
   font: 700 9px/1.4 var(--font-mono);
   letter-spacing: 1.2px;
   white-space: nowrap;
@@ -457,11 +457,11 @@ body.gev-imagery-box .cesium-widget canvas {
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid rgba(180, 215, 222, 0.72);
+  border: 1px solid var(--color-line-strong);
   border-radius: 50%;
   outline: 0;
-  color: rgba(239, 247, 249, 0.96);
-  background: rgba(4, 17, 27, 0.96);
+  color: var(--color-ink);
+  background: var(--color-bg);
   box-shadow:
     0 0 0 5px rgba(62, 112, 125, 0.3),
     0 0 13px rgba(94, 216, 239, 0.3);
@@ -472,7 +472,7 @@ body.gev-imagery-box .cesium-widget canvas {
   cursor: ew-resize;
 }
 #recent-imagery-split-line .recent-imagery-split-handle:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--color-line-strong);
   outline-offset: 4px;
 }
 

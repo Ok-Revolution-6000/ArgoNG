@@ -22,10 +22,12 @@ import {
 
 /** Chip label — pure, exported for tests. */
 export function keySetupChipLabel(status) {
-  const missing = Math.max(0, (status?.total || 0) - (status?.setCount || 0));
+  const missing = Array.isArray(status?.keys)
+    ? status.keys.filter(key => !key.set && !key.keylessReady).length
+    : Math.max(0, (status?.total || 0) - (status?.setCount || 0));
   return missing > 0
     ? `POWER UP · ${missing} ${missing === 1 ? 'KEY' : 'KEYS'} WAITING`
-    : 'POWERED UP';
+    : 'FULLY POWERED UP';
 }
 
 /**
@@ -132,6 +134,7 @@ function buildRow(documentRef, key) {
   row.className = 'key-setup-row';
   row.dataset.keyId = key.id;
   row.dataset.set = String(Boolean(key.set));
+  row.dataset.ready = String(Boolean(key.set || key.keylessReady));
   if (key.managed) row.dataset.managed = key.managed;
   const external = key.managed === 'external';
 
@@ -173,12 +176,14 @@ function buildRow(documentRef, key) {
   get.href = key.getUrl;
   get.target = '_blank';
   get.rel = 'noopener noreferrer';
-  get.textContent = key.set ? 'MANAGE ↗' : 'GET KEY ↗';
+  get.textContent = key.set ? 'MANAGE ↗' : key.keylessReady ? 'OPTIONAL UPGRADE ↗' : 'GET KEY ↗';
   head.append(get);
 
   const unlocks = documentRef.createElement('p');
   unlocks.className = 'key-setup-unlocks';
-  unlocks.textContent = key.unlocks;
+  unlocks.textContent = key.keylessReady && !key.set
+    ? 'Active · free access. No token required; add one only for a higher request allowance.'
+    : key.unlocks;
 
   row.append(head, unlocks);
   if (!external) {
@@ -316,9 +321,12 @@ export async function initKeySetup({
     chipLabel.textContent = keySetupChipLabel(status);
     chip.title = `Project keys: ${keySetupChipLabel(status)}`;
     chip.setAttribute('aria-label', chip.title);
-    // Fully powered is the owner's clean screen: the chip retires. The dialog
-    // stays reachable this session (and via ?setup=1) to swap or verify keys.
-    chip.hidden = status.setCount >= status.total;
+    chip.dataset.powered = String(keySetupChipLabel(status) === 'FULLY POWERED UP');
+    chip.title = chip.dataset.powered === 'true'
+      ? 'All providers configured or available keyless · Manage provider settings'
+      : `Project keys: ${keySetupChipLabel(status)}`;
+    chip.setAttribute('aria-label', chip.title);
+    chip.hidden = false;
     if (!rowsHost) return;
     rowsHost.textContent = '';
     for (const key of status.keys || [])

@@ -113,6 +113,7 @@ export const KEY_SETUP_KEYS = Object.freeze([
   }),
   Object.freeze({
     id: 'launch-library',
+    keylessReady: true,
     title: 'LAUNCH LIBRARY',
     unlocks: 'Higher space-missions request allowance',
     getUrl: 'https://thespacedevs.com',
@@ -388,6 +389,7 @@ export function keySetupStatus(env = {}) {
       envVars: [...entry.envVars],
       tier: entry.tier,
       clientExposed: Boolean(entry.clientExposed),
+      keylessReady: Boolean(entry.keylessReady),
       set,
     };
   });

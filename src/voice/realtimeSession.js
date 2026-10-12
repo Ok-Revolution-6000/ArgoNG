@@ -1,3 +1,4 @@
+import { bindVoiceProfile } from './history.js';
 import { GevRealtimeController } from './realtimeController.js';
 
 /** Adapt the existing WebRTC implementation to the common voice session. */
@@ -21,6 +22,7 @@ export function createRealtimeSession({
     sendMapEvent: (event) => controller.notifyMapEvent(event),
     ignoreButtonClick: () => Boolean(controller.spaceKeyHeld),
     bindControls() {
+      bindVoiceProfile(controller);
       if (controller.ui.tierButton) {
         controller.tierHandler = () => controller.toggleVoiceTier();
         controller.ui.tierButton.addEventListener(

@@ -37,7 +37,7 @@
     0 0 0 1px rgba(255, 255, 255, 0.03) inset,
     0 1px 0 rgba(255, 255, 255, 0.06) inset;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 212, 255, 0.46) rgba(255, 255, 255, 0.06);
+  scrollbar-color: var(--color-accent) var(--color-ink-faint);
 }
 
 /* Class-qualified, not id-qualified, so a theme's header rule still wins. */
@@ -82,7 +82,7 @@ button.sl-status:focus-visible {
 
 .sl-status.is-busy {
   color: var(--accent);
-  border-color: rgba(0, 212, 255, 0.55);
+  border-color: var(--color-line-strong);
 }
 
 .sl-status.is-warn {
@@ -305,7 +305,7 @@ button.sl-status:focus-visible {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--glass-border-hover);
-  background: #000;
+  background: var(--color-bg);
 }
 
 .sl-viewer-wrap[hidden] {
@@ -332,7 +332,7 @@ button.sl-status:focus-visible {
   display: grid;
   place-items: center;
   z-index: 3;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--color-bg);
 }
 
 .sl-viewer-placeholder[hidden] {
@@ -344,7 +344,7 @@ button.sl-status:focus-visible {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--color-line);
   border-top-color: var(--sl-green);
   animation: sl-spin 0.9s linear infinite;
 }
@@ -361,7 +361,7 @@ button.sl-status:focus-visible {
   justify-content: space-between;
   gap: 6px;
   padding: 5px 6px;
-  background: rgba(10, 10, 15, 0.85);
+  background: var(--color-bg);
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -376,7 +376,7 @@ button.sl-status:focus-visible {
 .sl-viewer-tools .scene-btn {
   padding: 4px 8px;
   font-size: var(--sl-text-small);
-  background: rgba(10, 10, 15, 0.75);
+  background: var(--color-bg);
   flex: none;
   min-width: 0;
   display: inline-flex;
@@ -385,7 +385,7 @@ button.sl-status:focus-visible {
 }
 
 .sl-viewer-tools .sl-seg {
-  background: rgba(10, 10, 15, 0.75);
+  background: var(--color-bg);
 }
 
 @container (max-width: 380px) {
@@ -399,8 +399,8 @@ button.sl-status:focus-visible {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 1.1rem;
@@ -412,9 +412,9 @@ button.sl-status:focus-visible {
 }
 
 .sl-viewer-x:hover {
-  color: #0a0a0f;
-  background: #fff;
-  border-color: #fff;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border-color: var(--color-line-strong);
 }
 
 .sl-image-meta {
@@ -424,7 +424,7 @@ button.sl-status:focus-visible {
   font-size: var(--sl-text-small);
   letter-spacing: 0.06em;
   color: var(--text-secondary);
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--color-bg);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -535,7 +535,7 @@ button.sl-status:focus-visible {
   display: flex;
   flex-direction: column;
   font-family: var(--font-mono);
-  border-color: rgba(0, 212, 255, 0.55);
+  border-color: var(--color-line-strong);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
   outline: none;
 }
@@ -566,8 +566,8 @@ button.sl-status:focus-visible {
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   color: var(--text-primary);
-  border-color: rgba(0, 212, 255, 0.6);
-  background: rgba(10, 10, 15, 0.82);
+  border-color: var(--color-line-strong);
+  background: var(--color-bg);
 }
 
 .sl-viewer-wrap-expanded #sl-viewer-expand::after {

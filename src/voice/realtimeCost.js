@@ -1,3 +1,4 @@
+import { voiceUsageView, renderVoiceUsage } from './usageView.js';
 import {
   readStoredVoiceTier,
   readStoredVoiceLimits,
@@ -21,6 +22,7 @@ export class RealtimeCost {
     this.cloudVoiceAuth = readStoredCloudVoiceAuthMode();
     this.sessionCloudVoiceAuth = null;
     this.oauthUsage = { responses: 0, input: 0, output: 0, captions: 0 };
+    this.apiUsage = { responses: 0, input: 0, output: 0, captions: 0 };
     this.transcribeModel = null;
     this.costTracker = createVoiceCostTracker({
       tier: this.voiceTier,
@@ -47,6 +49,16 @@ export class RealtimeCost {
     const state = this.costTracker.state();
     const pendingTier = resolveVoiceModel(this.voiceTier).tier;
     const isMini = pendingTier === 'mini';
+    const liveAuth = this.sessionCloudVoiceAuth || this.cloudVoiceAuth;
+    renderVoiceUsage(
+      this.ui,
+      voiceUsageView({
+        state,
+        usage: liveAuth === 'oauth' ? this.oauthUsage : this.apiUsage,
+        auth: liveAuth,
+        pendingModelId: resolveVoiceModel(pendingTier).id,
+      }),
+    );
     if (this.ui?.tierButton) {
       this.ui.tierButton.textContent = isMini ? 'MINI' : 'STD';
       this.ui.tierButton.setAttribute(
@@ -62,7 +74,6 @@ export class RealtimeCost {
             }; applies next session`;
     }
     if (this.ui?.costValue) {
-      const liveAuth = this.sessionCloudVoiceAuth || this.cloudVoiceAuth;
       if (liveAuth === 'oauth') {
         const { responses, input, output, captions } = this.oauthUsage;
         this.ui.costValue.hidden = false;
@@ -74,16 +85,18 @@ export class RealtimeCost {
           (state.incomplete
             ? ' Usage is incomplete because a response was still in flight when the session ended.'
             : '');
+        this.history?.paint();
         return;
       }
       this.ui.costValue.hidden = false;
       this.ui.costValue.textContent = state.display;
       this.ui.costValue.dataset.level = state.level;
       this.ui.costValue.title =
-        `Estimated session cost on ${state.modelId} — ${state.responses} response(s). ` +
+        `Estimated session cost on ${state.modelId} — ${this.apiUsage.responses} response(s), ${this.apiUsage.captions} caption transcription(s). ` +
         `Warns at ${formatCostUsd(state.warnUsd)}, ends the session at ${formatCostUsd(state.capUsd)}.` +
         (state.note ? ` ${state.note}` : '');
     }
+    this.history?.paint();
   }
 
   /**
@@ -116,6 +129,7 @@ export class RealtimeCost {
   setVoiceTier(tier) {
     this.voiceTier = writeStoredVoiceTier(tier);
     if (this.isVoiceSessionSettled()) {
+      this.apiUsage = { responses: 0, input: 0, output: 0, captions: 0 };
       this.costTracker = createVoiceCostTracker({
         tier: this.voiceTier,
         limits: this.voiceLimits,
@@ -141,6 +155,7 @@ export class RealtimeCost {
   setVoiceCostLimits(limits) {
     this.voiceLimits = writeStoredVoiceLimits(limits);
     if (this.isVoiceSessionSettled()) {
+      this.apiUsage = { responses: 0, input: 0, output: 0, captions: 0 };
       this.costTracker = createVoiceCostTracker({
         tier: this.voiceTier,
         limits: this.voiceLimits,
@@ -166,6 +181,10 @@ export class RealtimeCost {
       this.syncCostUi();
       return { ...this.oauthUsage, costKnown: false };
     }
+    const count = (value) => (Number.isFinite(value) && value > 0 ? value : 0);
+    this.apiUsage.responses += 1;
+    this.apiUsage.input += count(usage.input_tokens);
+    this.apiUsage.output += count(usage.output_tokens);
     return this.applyCost(this.costTracker.record(usage));
   }
 
@@ -183,6 +202,7 @@ export class RealtimeCost {
       this.syncCostUi();
       return { ...this.oauthUsage, costKnown: false };
     }
+    this.apiUsage.captions += 1;
     return this.applyCost(
       this.costTracker.recordUsd(
         estimateTranscriptionCostUsd(usage, this.transcribeModel),
@@ -195,6 +215,7 @@ export class RealtimeCost {
   }
 
   applyCost(state) {
+    this.history?.save(state, this.apiUsage);
     this.syncCostUi();
     if (state.warnCrossed) {
       // Exactly one line — the latch in the tracker guarantees it.
@@ -246,11 +267,13 @@ export class RealtimeCost {
   }
 
   prepareSession() {
+    this.history?.start();
     this.voiceTier = readStoredVoiceTier();
     this.voiceLimits = readStoredVoiceLimits();
     this.cloudVoiceAuth = readStoredCloudVoiceAuthMode();
     this.sessionCloudVoiceAuth = this.cloudVoiceAuth;
     this.oauthUsage = { responses: 0, input: 0, output: 0, captions: 0 };
+    this.apiUsage = { responses: 0, input: 0, output: 0, captions: 0 };
     this.costCapStopped = false;
     // Provisional meter (tier-priced) so the readout shows $0.00 while
     // connecting. It is REPLACED below with one bound to the model the server

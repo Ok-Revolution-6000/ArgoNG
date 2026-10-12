@@ -17,7 +17,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.42rem;
-  color: rgba(206, 232, 239, 0.72);
+  color: var(--color-ink-dim);
   font-size: 0.58rem;
   font-weight: 500;
   letter-spacing: 0.13rem;
@@ -28,7 +28,7 @@
   flex: 0 0 1rem;
   width: 1rem;
   height: 1rem;
-  background: rgba(232, 234, 237, 0.3);
+  background: color-mix(in srgb, var(--color-ink) 30%, transparent);
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -130,11 +130,11 @@
 }
 
 #command-dock .location-toolbar-label::after {
-  background: linear-gradient(to right, rgba(232, 234, 237, 0.3), transparent);
+  background: linear-gradient(to right, color-mix(in srgb, var(--color-ink) 30%, transparent), transparent);
 }
 
 #command-dock #control-panel .panel-title::after {
-  background: linear-gradient(to left, rgba(232, 234, 237, 0.3), transparent);
+  background: linear-gradient(to left, color-mix(in srgb, var(--color-ink) 30%, transparent), transparent);
 }
 
 #command-dock .panel-title::after,
@@ -161,7 +161,7 @@
   margin: -1.48rem -0.22rem 0.25rem 0;
   padding: 0;
   border-radius: 50%;
-  background: rgba(8, 24, 34, 0.96);
+  background: var(--color-bg);
   box-shadow: 0 0.35rem 0.9rem rgba(0, 0, 0, 0.5);
   transform: translateY(-0.12rem);
 }
@@ -271,8 +271,8 @@
   height: 2.45rem;
   aspect-ratio: 1;
   box-sizing: border-box;
-  background: rgba(0, 212, 255, 0.06);
-  border: 1px solid rgba(0, 212, 255, 0.48);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-line-strong);
   border-radius: 50%;
   box-shadow:
     0 0 0 0.18rem rgba(0, 212, 255, 0.06),
@@ -375,7 +375,7 @@
   visibility: hidden;
   opacity: 0;
   color: rgba(255, 220, 224, 0.92);
-  background: rgba(34, 10, 16, 0.96);
+  background: var(--color-bg);
   border: 1px solid rgba(255, 92, 110, 0.5);
   border-radius: 0.42rem;
   box-shadow:
@@ -416,7 +416,7 @@
 #command-dock .gev-voice-error-dismiss {
   padding: 0.25rem 0.42rem;
   color: rgba(255, 220, 224, 0.72);
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
   border: 1px solid rgba(255, 143, 157, 0.32);
   border-radius: 0.2rem;
   font-family: var(--font-mono);
@@ -427,7 +427,7 @@
 
 #command-dock #gev-voice-error-detail {
   margin-top: 0.65rem;
-  color: rgba(255, 232, 235, 0.92);
+  color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 0.78rem;
   line-height: 1.45;

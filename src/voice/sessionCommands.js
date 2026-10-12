@@ -1,3 +1,5 @@
+import { bindApiUsage } from './apiUsage.js';
+import { bindMicrophoneSelector } from './microphone.js';
 import { createVoiceControl } from './control.js';
 import { createVoiceSession } from './session.js';
 import { VoiceCardControls } from './voiceCard.js';
@@ -48,9 +50,12 @@ export function createVoiceCommands({
       }),
   });
   const adapter = session.adapter;
+  const cleanupMicrophone = bindMicrophoneSelector(ui);
+  const cleanupApiUsage = bindApiUsage(ui);
   const capabilities = adapter.capabilities || {};
   if (ui.tierButton) ui.tierButton.hidden = !capabilities.costControls;
   if (ui.costValue) ui.costValue.hidden = !capabilities.costControls;
+  if (ui.usageDetails) ui.usageDetails.hidden = !capabilities.costControls;
   if (!capabilities.pushToTalk) {
     ui.button.setAttribute('aria-label', 'Toggle voice control');
     if (ui.helpDetail) ui.helpDetail.textContent = 'Activate to toggle voice';
@@ -109,6 +114,8 @@ export function createVoiceCommands({
     'abort',
     () => {
       ui.button.removeEventListener('click', buttonHandler);
+      cleanupMicrophone();
+      cleanupApiUsage();
       annotationUnsubscribe?.();
       updateStatus();
       updateCard?.();
@@ -122,6 +129,8 @@ export function createVoiceCommands({
   );
   if (session.disposed) {
     ui.button.removeEventListener('click', buttonHandler);
+    cleanupMicrophone();
+    cleanupApiUsage();
     annotationUnsubscribe?.();
     updateStatus();
     updateCard?.();

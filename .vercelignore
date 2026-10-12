@@ -1,0 +1,15 @@
+.git
+node_modules
+dist
+.env
+.env.*
+.gev-cache
+.gev-logs
+screenshots
+qa-shots
+qa-artifacts
+output
+3d-models
+pinokio/ENVIRONMENT
+*.log
+.DS_Store

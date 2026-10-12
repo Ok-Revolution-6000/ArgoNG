@@ -265,7 +265,6 @@
     left: 16px;
   }
 
-  #title-bar h1 > span:last-child,
   #title-bar .subtitle {
     display: none;
   }

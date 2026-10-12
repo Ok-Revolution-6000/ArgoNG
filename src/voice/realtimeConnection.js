@@ -1,3 +1,4 @@
+import { microphoneConstraints } from './microphone.js';
 const DISCONNECT_GRACE_MS = 6000;
 
 function releaseStartResources({ localStream = null, localPc = null } = {}) {
@@ -115,14 +116,9 @@ export class RealtimeConnection {
         servedTier: minted.tier || null,
         ratesRecognized: costState.ratesRecognized,
       });
-      localStream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          channelCount: 1,
-        },
-      });
+      localStream = await navigator.mediaDevices.getUserMedia(
+        microphoneConstraints(),
+      );
       if (this.abandonStart(epoch, { localStream, localPc })) return;
       this.stream = localStream;
       this.setMicrophoneEnabled(
@@ -183,11 +179,21 @@ export class RealtimeConnection {
             : 'Hold Space to talk'
           : 'Ask or command';
         this.setStatus('listening', detail);
+        void this.greet?.(dataChannel);
         this.debugLog('data_channel.open', {
           connection: this.connectionDiagnostics(dataChannel),
         });
       });
       dataChannel.addEventListener('message', (event) => {
+        if (ownsChannel()) {
+          try {
+            if (
+              JSON.parse(event.data).type ===
+              'input_audio_buffer.speech_started'
+            )
+              this.cost.history?.touch();
+          } catch {}
+        }
         if (ownsChannel() && dataChannel.readyState === 'open')
           return this.handleRealtimeEvent(event);
       });

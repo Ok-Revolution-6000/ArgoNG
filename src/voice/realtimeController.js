@@ -224,6 +224,17 @@ export class GevRealtimeController extends RealtimeFacade {
       input: this._input,
       cost: this._cost,
       operations: {
+        greet: (channel) =>
+          this._cost.history?.greet(
+            (line) => this._turns.speakGreeting(line),
+            () =>
+              this.dc === channel &&
+              channel.readyState === 'open' &&
+              !this._turns.responseActive &&
+              !this._turns.responseCreatePending &&
+              !this._turns.userTurnPending &&
+              !this.pushToTalkKeyHeld,
+          ),
         isActive: (...args) => this.isActive(...args),
         pauseRadioForVoice: (...args) => this.pauseRadioForVoice(...args),
         stop: (...args) => this.stop(...args),
@@ -376,6 +387,7 @@ export class GevRealtimeController extends RealtimeFacade {
     });
     if (this.dc && this.responseActive) {
       this.costTracker.markIncomplete();
+      this._cost.history?.save(this.costTracker.state(), this._cost.apiUsage);
       this.syncCostUi();
     }
     this._metrics.flush('stop');
@@ -400,6 +412,7 @@ export class GevRealtimeController extends RealtimeFacade {
       this.ui.tierButton.removeEventListener('click', this.tierHandler);
       this.tierHandler = null;
     }
+    if (removeUi) this._cost.history?.destroy();
     if (removeUi) this._input.detachBindings();
     if (removeUi && this.annotationEventUnsubscribe) {
       // Full teardown (re-init path): stop listening to the long-lived annotation

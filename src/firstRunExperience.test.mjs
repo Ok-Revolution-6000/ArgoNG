@@ -568,14 +568,9 @@ test('markup, startup ordering and accessibility remain pinned', () => {
   assert.match(visible, /earthquakes/i);
   assert.match(visible, /fires?/i, 'the tile must promise the fires it enables');
 
-  // The card's one persuasive line is OWNER-AUTHORED and pinned verbatim,
-  // unspaced em dash included. This is copy, not prose to be improved in a
-  // passing edit — changing it needs the owner, not a nicer-sounding rewrite.
-  assert.ok(
-    html.includes('<p id="first-run-description">It feels like a forbidden cockpit'
-      + '—then you realize the sources are public and the data is real.</p>'),
-    'the owner-authored first-run line must ship exactly as written',
-  );
+  // TAM-C's corporate introduction preserves the mission chooser below it.
+  assert.match(html, /id="first-run-title">Intelligence Central\.<\/h2>/);
+  assert.match(html, /id="first-run-description">A unified view of global activity\./);
 
   // Menu order is the owner's, read straight off the markup.
   const order = [...html.matchAll(/data-first-run-choice="([a-z-]+)"/g)].map((match) => match[1]);

@@ -64,7 +64,7 @@
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.8px;
-  color: #bdefff;
+  color: var(--color-ink);
 }
 
 .location-mini-poi {
@@ -93,8 +93,8 @@
 
 .location-pill {
   padding: 6px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 20px;
   cursor: pointer;
   transition:
@@ -121,7 +121,7 @@
 }
 
 .location-pill:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   border-color: var(--glass-border-hover);
   transform: translateY(-1px);
 }
@@ -181,8 +181,8 @@
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 20px;
   cursor: pointer;
   transition:
@@ -197,7 +197,7 @@
 }
 
 .poi-pill:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   border-color: var(--glass-border-hover);
   transform: translateY(-1px);
 }
@@ -225,7 +225,7 @@
   font-size: 8px;
   letter-spacing: 1px;
   color: var(--text-dim);
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
   padding: 2px 5px;
   border-radius: 3px;
   flex-shrink: 0;
@@ -233,7 +233,7 @@
 
 .poi-pill.active .poi-pill-key {
   color: var(--accent);
-  background: rgba(0, 212, 255, 0.12);
+  background: var(--color-accent-dim);
 }
 
 /* ── Location Search ─────────────────────────── */
@@ -250,8 +250,8 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 50%;
   cursor: pointer;
   transition:
@@ -265,7 +265,7 @@
 }
 
 .search-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   border-color: var(--glass-border-hover);
 }
 

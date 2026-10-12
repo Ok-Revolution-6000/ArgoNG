@@ -1,5 +1,5 @@
 /**
- * The God's Eye View panel's script, run inside the panel page a host shows.
+ * The ArgoNG panel's script, run inside the panel page a host shows.
  * It is sent as source text (see src/tools/globePanel.js), so it must not use
  * imports or anything outside the function.
  *
@@ -459,7 +459,7 @@ export function panelRuntime(config) {
   }
 
   /**
-   * Load God's Eye View into this page from the app's panel build, in
+   * Load ArgoNG into this page from the app's panel build, in
    * inline embed mode, starting at the first view as its link would.
    */
   async function startApp(url, view) {
@@ -568,16 +568,16 @@ export function panelRuntime(config) {
     queued = view;
     if (started) return;
     started = true;
-    say("Loading God's Eye View…");
+    say("Loading ArgoNG…");
     startApp(url, view).catch((error) =>
-      say(`God's Eye View could not load here: ${error?.message || error}.`),
+      say(`ArgoNG could not load here: ${error?.message || error}.`),
     );
     setTimeout(() => {
       if (!ready)
         say(
-          "God's Eye View did not load here" +
+          "ArgoNG did not load here" +
             (blocked ? ` (${blocked})` : '') +
-            ". Use Open in God's Eye View above.",
+            ". Use Open in ArgoNG above.",
         );
     }, config.loadTimeoutMs);
   }
@@ -640,7 +640,7 @@ export function panelRuntime(config) {
     appCapabilities: { availableDisplayModes: ['inline', 'fullscreen'] },
     appInfo: {
       name: 'gods-eye-view',
-      title: "God's Eye View",
+      title: "ArgoNG",
       version: '1.0.0',
     },
     protocolVersion: config.protocolVersion,
@@ -655,7 +655,7 @@ export function panelRuntime(config) {
     },
     (error) =>
       say(
-        "This client did not accept the God's Eye View panel" +
+        "This client did not accept the ArgoNG panel" +
           (error?.message ? `: ${error.message}` : '.'),
       ),
   );

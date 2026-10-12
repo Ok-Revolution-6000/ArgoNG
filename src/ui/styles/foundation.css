@@ -653,3 +653,32 @@ body.cockpit-mode #cockpit-cloud-effects.active {
   text-shadow: 0 0 20px var(--accent-glow);
   transition: var(--transition-smooth);
 }
+
+/* Parent-company attribution shared by the header and loading screen. */
+.company-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
+.company-brand p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  color: var(--text-secondary, #b4becb);
+}
+.company-brand img {
+  display: block;
+  width: 158px;
+  height: auto;
+}
+.loader-content .company-brand {
+  align-items: center;
+  margin: 0 0 28px;
+}
+.loader-content .company-brand img {
+  width: 185px;
+}

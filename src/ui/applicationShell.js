@@ -1,3 +1,4 @@
+import { bindGuide } from './guide.js';
 import { resolveImageryHost } from '../layers/weather/imageryHost.js';
 import { ShellFacade } from './shellFacade.js';
 import { AircraftDisplay } from './aircraftDisplay.js';
@@ -88,6 +89,7 @@ export class StyleManager extends ShellFacade {
     } = services;
     this.services = services;
     this._lifetime = new UiLifetime();
+    this._guide = bindGuide();
     this._recording = new RecordingControls({
       syncShareState: () => this._syncShareState(),
     });
@@ -1575,6 +1577,7 @@ export class StyleManager extends ShellFacade {
     this._navigation.stop();
     this._shareState.destroy();
     this._locationNavigation.destroy();
+    this._guide?.destroy();
     this._lifetime.destroy();
     this._recording.destroy();
     this._panelChrome.destroy();

@@ -94,23 +94,13 @@
 }
 
 #left-panel-stack > [data-panel-id]:not(.collapsed) .panel-divider {
-  background: linear-gradient(
-    90deg,
-    rgb(0 212 255 / 28%),
-    rgba(0, 212, 255, 0.18) 58%,
-    transparent
-  );
-  box-shadow: 0 0 7px rgba(0, 212, 255, 0.22);
+  background: var(--color-line);
+  box-shadow: none;
 }
 
 #right-context-rail [data-panel-id]:not(.collapsed) .panel-divider {
-  background: linear-gradient(
-    90deg,
-    rgb(0 212 255 / 28%),
-    rgba(0, 212, 255, 0.18) 58%,
-    transparent
-  );
-  box-shadow: 0 0 7px rgba(0, 212, 255, 0.22);
+  background: var(--color-line);
+  box-shadow: none;
 }
 
 #scene-panel .panel-glow {
@@ -118,7 +108,7 @@
   inset: -18px;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 212, 255, 0.16) 0%,
+    var(--color-accent-dim) 0%,
     transparent 65%
   );
   filter: blur(16px);
@@ -153,8 +143,8 @@
 #scene-select {
   flex: 1;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 7px;
   color: var(--text-primary);
   padding: 6px 8px;
@@ -164,8 +154,8 @@
 }
 
 .scene-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 7px;
   color: var(--text-secondary);
   font-family: var(--font-mono);
@@ -206,12 +196,12 @@
 }
 
 .scene-shot-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: color-mix(in srgb, var(--color-ink) 16%, transparent);
   border-radius: 999px;
 }
 
 .scene-shot-empty {
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed var(--color-line);
   border-radius: 8px;
   padding: 10px 8px;
   text-align: center;
@@ -222,10 +212,10 @@
 }
 
 .scene-shot-row {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--color-line);
   border-radius: 9px;
   padding: 7px 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--color-ink) 3%, transparent);
   transition:
     border-color var(--transition-fast),
     background var(--transition-fast);
@@ -233,7 +223,7 @@
 
 .scene-shot-row.active {
   border-color: var(--accent);
-  background: rgba(0, 212, 255, 0.08);
+  background: var(--color-accent-dim);
 }
 
 .scene-shot-top {
@@ -258,8 +248,8 @@
   box-sizing: border-box;
   font: inherit;
   color: var(--text-primary);
-  background: var(--bg-panel, #101820);
-  border: 1px solid var(--accent, #00d4ff);
+  background: var(--bg-panel, var(--color-bg));
+  border: 1px solid var(--accent, var(--color-line-strong));
 }
 
 .scene-shot-meta {
@@ -276,9 +266,9 @@
 }
 
 .scene-shot-btn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--color-line);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
   color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 8px;
@@ -304,7 +294,7 @@
 .scene-btn:hover:not(:disabled) {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(0, 212, 255, 0.14);
+  background: var(--color-accent-dim);
 }
 
 .scene-btn:disabled {
@@ -323,8 +313,8 @@
   width: 100%;
   height: 18px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border: 1px solid var(--color-line);
   overflow: hidden;
 }
 
@@ -333,10 +323,10 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(0, 212, 255, 0.2),
-    rgba(0, 212, 255, 0.75)
+    var(--color-accent-dim),
+    var(--color-accent-dim)
   );
-  color: #d5f7ff;
+  color: var(--color-ink);
   font-family: var(--font-mono);
   font-size: 8px;
   letter-spacing: 1px;
@@ -370,9 +360,9 @@
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 2px;
-  color: #bff4ff;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(0, 212, 255, 0.36);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line-strong);
   border-radius: 999px;
   padding: 6px 14px;
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.55);
@@ -452,5 +442,5 @@
 }
 
 .director-sharing-dialog::backdrop {
-  background: rgba(0, 8, 14, 0.65);
+  background: var(--color-bg);
 }

@@ -287,25 +287,13 @@ export class PanelChrome {
   }
 
   _syncPanelCollapseButton(panelEl) {
-    const isRightRail = [
-      'pp-toggles',
-      'cctv-panel',
-      'weather-panel',
-      'recent-imagery-panel',
-      'street-level-panel',
-      'global-context-panel',
-    ].includes(panelEl?.id);
     const collapsed = panelEl.classList.contains('collapsed');
     panelEl
       .querySelectorAll('.panel-collapse-btn[data-collapse-target]')
       .forEach((btn) => {
         const owner = btn.closest('[data-panel-id], #param-slider-panel');
         if (owner !== panelEl) return;
-        if (isRightRail) {
-          btn.textContent = collapsed ? '◀' : '▶';
-        } else {
-          btn.textContent = collapsed ? '+' : '−';
-        }
+        btn.textContent = collapsed ? '+' : '−';
         btn.setAttribute('aria-expanded', String(!collapsed));
         const panelName =
           panelEl

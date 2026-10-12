@@ -45,8 +45,8 @@ test('setup placement moves the same button only in Cyber and disconnects on tea
 test('the chip counts what is missing, and retires the count at zero', () => {
   assert.equal(keySetupChipLabel({ setCount: 0, total: 8 }), 'POWER UP · 8 KEYS WAITING');
   assert.equal(keySetupChipLabel({ setCount: 7, total: 8 }), 'POWER UP · 1 KEY WAITING');
-  assert.equal(keySetupChipLabel({ setCount: 8, total: 8 }), 'POWERED UP');
-  assert.equal(keySetupChipLabel(null), 'POWERED UP', 'no status is not a broken label');
+  assert.equal(keySetupChipLabel({ setCount: 8, total: 8 }), 'FULLY POWERED UP');
+  assert.equal(keySetupChipLabel(null), 'FULLY POWERED UP', 'no status is not a broken label');
 });
 
 test('collectKeyUpdates keeps only non-empty trimmed values', () => {
@@ -155,4 +155,12 @@ test('aborting pending setup removes its surface and ignores a late response', a
   assert.deepEqual(removed, ['chip', 'root']);
   resolveResponse({ ok: true, json: async () => ({ keys: [] }) });
   assert.equal(await pending, null);
+});
+
+
+test('keyless Launch Library counts as ready while missing required keys still count', () => {
+  const keys = [{id:'openai',set:true}, {id:'launch-library',set:false,keylessReady:true}];
+  assert.equal(keySetupChipLabel({keys,total:2,setCount:1}), 'FULLY POWERED UP');
+  keys[0].set = false;
+  assert.equal(keySetupChipLabel({keys,total:2,setCount:0}), 'POWER UP · 1 KEY WAITING');
 });

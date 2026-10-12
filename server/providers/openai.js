@@ -1,3 +1,4 @@
+import { createVoiceHistory } from './openai/history.js';
 import { defaultSourceRoot } from './common/source-root.js';
 import { handleHudSummary } from './openai/hud-summary.js';
 import { createDebugLogHandler } from './openai/debug-log.js';
@@ -21,7 +22,9 @@ function openAiRealtimeProxy({
   realtime = {},
 } = {}) {
   const oauthLogin = createCodexOAuthLogin(realtime);
+  const history = createVoiceHistory({ sourceRoot });
   function install(middlewares) {
+    middlewares.use('/api/realtime/history', sameSiteGated(history));
     // Cost-bearing and log endpoints refuse cross-site browser requests
     // (see server/providers/common/same-site.js and SECURITY.md).
     middlewares.use('/api/openai/hud-summary', sameSiteGated(handleHudSummary));
