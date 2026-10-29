@@ -161,3 +161,31 @@ test('the earcon only plays when its output cannot reach the microphone', () => 
   r.advance(1000);
   assert.equal(r.events.includes('earcon:start'), false);
 });
+
+test('a busy speech channel at the progress deadline retries when quiet', () => {
+  let allowed=false;
+  const r=rig({canSpeak:()=>allowed});
+  r.scheduler.userTurnEnded();
+  r.scheduler.preamble();
+  r.scheduler.toolStarted('slow',{label:'CCTV'});
+  r.advance(8000);
+  assert.equal(r.spoken.length,0);
+  allowed=true;
+  r.advance(500);
+  assert.deepEqual(r.spoken.map(s=>s.line),['Still working on CCTV.']);
+  r.advance(10000);
+  assert.equal(r.spoken.length,1);
+});
+test('completion or cancellation drops a blocked progress retry', () => {
+  for(const finish of ['toolFinished','cancel']) {
+    let allowed=false;
+    const r=rig({canSpeak:()=>allowed});
+    r.scheduler.userTurnEnded();
+    r.scheduler.toolStarted('slow',{label:'CCTV'});
+    r.advance(8000);
+    r.scheduler[finish]('slow');
+    allowed=true;
+    r.advance(10000);
+    assert.equal(r.spoken.length,0);
+  }
+});

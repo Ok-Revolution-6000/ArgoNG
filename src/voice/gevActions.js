@@ -498,6 +498,9 @@ export function createGevActionRunner({
         ...lifecycleSummary,
         ...(snapshot?.feedState ? { feedState: snapshot.feedState } : {}),
         ...(snapshot?.source ? { source: snapshot.source } : {}),
+        ...(snapshot?.trafficCoverage
+          ? { trafficCoverage: snapshot.trafficCoverage }
+          : {}),
       };
     }
 

@@ -1486,6 +1486,18 @@ export function flyRoute(
     }
     route = byLabel[byLabel.length - 1];
   }
+  // Select the requested/newest route first: never silently substitute an
+  // older valid route when the operator's newest route is only a fallback.
+  if (route.fallback) {
+    return {
+      ok: false,
+      action: 'fly_route',
+      reason: 'route_unavailable',
+      routeFallback: true,
+      label: route.label || null,
+      error: 'This is a straight-line fallback, not a verified travel route. Route flight was not started. Retry routing or choose another destination.',
+    };
+  }
   if (
     route.path.some(
       (point) =>

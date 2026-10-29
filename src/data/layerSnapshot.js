@@ -150,6 +150,23 @@ export function layerSnapshot(layer = {}, { now = Date.now() } = {}) {
     ageSec: snapshotAgeSec(lastUpdate, now),
     ageLabel: snapshotAgeLabel(lastUpdate, now),
     error: snapshotError(stats),
+    ...((layer.id || layer.layerKey) === 'traffic'
+      ? {
+          trafficCoverage: {
+            mode: ['live', 'sim'].includes(stats.mode) ? stats.mode : 'unknown',
+            flowCoveragePct:
+              typeof stats.flowCoveragePct === 'number' &&
+              Number.isFinite(stats.flowCoveragePct)
+                ? Math.max(0, Math.min(100, stats.flowCoveragePct))
+                : null,
+            simulatedCount:
+              typeof stats.flowBuckets?.sim === 'number' &&
+              Number.isFinite(stats.flowBuckets.sim)
+                ? Math.max(0, stats.flowBuckets.sim)
+                : null,
+          },
+        }
+      : {}),
   };
 }
 
@@ -181,7 +198,15 @@ export function feedProvenanceNote(layers = [], overall = null) {
     return 'No layer snapshot is attached. Do not invent a feed-state or a count.';
   }
   if (overall === 'nominal') {
-    return 'Queried enabled layers are nominal. Still name the count scope; do not claim whole-world coverage.';
+    const traffic = layers.find(
+      (layer) => layer.enabled && layer.trafficCoverage,
+    )?.trafficCoverage;
+    const note =
+      'Queried enabled layers are nominal. Still name the count scope; do not claim whole-world coverage.';
+    if (traffic?.simulatedCount > 0 || traffic?.mode === 'sim') {
+      return `${note} Traffic includes simulated markers${traffic.flowCoveragePct === null ? '' : `; measured flow covers ${traffic.flowCoveragePct}% of displayed traffic`}. Do not describe simulated motion as observed congestion or real vehicle positions.`;
+    }
+    return note;
   }
   if (overall === 'off') {
     const names =

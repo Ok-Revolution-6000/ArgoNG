@@ -258,3 +258,43 @@ test('age labels match the Data Layers meta clock', () => {
   assert.equal(snapshotAgeLabel(NOW - 240_000, NOW), '4m ago');
   assert.equal(snapshotAgeLabel(NOW - 7_200_000, NOW), '2h ago');
 });
+
+test('traffic provenance preserves mixed measured and simulated coverage for Jason', () => {
+  const snapshot = layerSnapshot({
+    id: 'traffic',
+    enabled: true,
+    stats: {
+      mode: 'live',
+      source: 'TomTom + OpenStreetMap',
+      count: 1100,
+      flowCoveragePct: 65,
+      flowBuckets: { sim: 381 },
+    },
+  });
+  assert.deepEqual(snapshot.trafficCoverage, {
+    mode: 'live',
+    flowCoveragePct: 65,
+    simulatedCount: 381,
+  });
+  const envelope = feedProvenanceEnvelope([snapshot]);
+  assert.match(envelope.note, /simulated markers/);
+  assert.match(envelope.note, /65%/);
+  assert.match(envelope.note, /not describe simulated motion as observed/);
+});
+
+test('missing traffic metrics stay unknown and unrelated layers do not acquire traffic metadata', () => {
+  assert.deepEqual(
+    layerSnapshot({ id: 'traffic', enabled: true, stats: {} }).trafficCoverage,
+    { mode: 'unknown', flowCoveragePct: null, simulatedCount: null },
+  );
+  assert.equal(
+    layerSnapshot({ id: 'flights', stats: {} }).trafficCoverage,
+    undefined,
+  );
+  const off = layerSnapshot({
+    id: 'traffic',
+    enabled: false,
+    stats: { mode: 'sim', flowBuckets: { sim: 10 } },
+  });
+  assert.doesNotMatch(feedProvenanceEnvelope([off]).note, /measured flow/);
+});

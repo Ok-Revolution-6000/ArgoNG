@@ -109,7 +109,7 @@ export function createNarrationScheduler({
   }
 
   function trySpeak(line, kind) {
-    if (!line || !canSpeak()) return false;
+    if (!line || audibleNow || !canSpeak()) return false;
     let spoken = false;
     try {
       spoken = speak(line, { kind }) !== false;
@@ -203,12 +203,19 @@ export function createNarrationScheduler({
         firstLineScheduled = true;
         later(timing.firstLineMs, speakStep);
       }
-      later(timing.stillWorkingMs, () => {
+      const speakStillWorking = () => {
         const tool = tools.get(id);
         if (!tool || stillSpoken) return;
-        if (trySpeak(progressLine('still', tool.label), 'still'))
+        if (trySpeak(progressLine('still', tool.label), 'still')) {
           stillSpoken = true;
-      });
+        } else {
+          // The deadline can coincide with a preamble or response handoff.
+          // Retry only while this tool/turn is current; completion and barge-in
+          // cancel these timers. Keep the existing one-line-per-turn budget.
+          later(500, speakStillWorking);
+        }
+      };
+      later(timing.stillWorkingMs, speakStillWorking);
     },
 
     /** A tool reported a step. */

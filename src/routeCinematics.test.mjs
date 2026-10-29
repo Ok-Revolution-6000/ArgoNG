@@ -1078,3 +1078,19 @@ test('a new viewer lifetime drops the previous view-target getter', () => {
   interruptCameraMotion('test-cleanup');
   second.restore();
 });
+
+test('route flight refuses a fallback without camera handoff or substitution', () => {
+  const path = [{lat:51.5,lon:-.12},{lat:51.51,lon:-.13}];
+  const verified = {type:'route',label:'Older verified walk',path,fallback:false};
+  const fallback = {type:'route',label:'Requested walk',path,fallback:true};
+  let handoffs = 0;
+  const navigate = () => { handoffs++; throw new Error('must not move'); };
+  for (const args of [{}, {label:'Requested walk'}]) {
+    const result = flyRoute([verified,fallback],args,null,navigate);
+    assert.equal(result.ok,false);
+    assert.equal(result.routeFallback,true);
+    assert.equal(result.reason,'route_unavailable');
+    assert.equal(result.label,'Requested walk');
+  }
+  assert.equal(handoffs,0);
+});

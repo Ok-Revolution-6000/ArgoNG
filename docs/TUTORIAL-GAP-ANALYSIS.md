@@ -84,9 +84,9 @@ One expectation to keep clear: the tutorial itself acknowledges vessel-coverage 
 ## Execution status
 
 - [x] Save the tutorial comparison and roadmap.
-- [ ] User adds remaining provider powerups, starting with Cesium ion.
+- [x] Provider credentials configured locally (Launch Library uses free keyless access).
 - [ ] Validate configured providers and distinguish missing keys, unavailable feeds and healthy empty coverage.
-- [ ] Run the tutorial-parity acceptance sequence.
+- [ ] Complete tutorial-parity acceptance (first tool-runner pass completed; route resolution and voice-model sequencing still need validation).
 - [ ] Fix demonstrated orchestration failures.
 - [ ] Implement sourced, map-driven current-event investigation.
 - [ ] Implement persistent incident workspaces.
@@ -96,3 +96,10 @@ One expectation to keep clear: the tutorial itself acknowledges vessel-coverage 
 - **Cesium ion — verified 2026-10-12:** token configured; Bing Aerial and Bing Labels both switched successfully in a fresh local browser session. Ion asset endpoints for imagery (2 and 3) and World Terrain (1) returned HTTP 200; imagery and terrain resources loaded without observed HTTP errors during the check.
 - **AISStream — configured 2026-10-12:** provider settings report a key present. Live feed validation is still pending.
 - **Launch Library 2 — verified keyless 2026-10-12:** `LL2_API_TOKEN` is absent. `/api/launches` returned HTTP 200 with a fresh upstream response containing 24 launches. Context → Space Missions displayed all 24 records in its 30-day roster. No paid credential or new integration was required; upcoming launches and other LL2 datasets are outside this verification.
+
+### Local parity baseline — 2026-10-12
+
+See [the acceptance report](TUTORIAL-PARITY-2026-10-12.md) for live provider
+observations, tool results, limitations and the traffic-provenance fix. AISStream,
+OpenSky, FIRMS, TomTom and Launch Library returned live data. Voice-model
+sequencing and sourced incident investigation remain pending.

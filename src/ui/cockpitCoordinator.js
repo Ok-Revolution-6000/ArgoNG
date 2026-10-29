@@ -329,12 +329,17 @@ export class CockpitCoordinator {
       };
     }
     if (normalized === 'exit') {
-      const exited = !!this.cockpitView.exit();
+      const wasActive = Boolean(this.cockpitView.active);
+      this.cockpitView.exit();
+      const state = this.getCockpitState();
+      const inactive = state?.active === false;
       return {
-        ok: exited,
+        ok: inactive,
         action: 'control_cockpit',
-        state: this.getCockpitState(),
-        error: exited ? null : 'Cockpit was already inactive',
+        state,
+        changed: inactive && wasActive,
+        alreadyInactive: inactive && !wasActive,
+        error: inactive ? null : 'Cockpit did not exit',
       };
     }
     if (normalized === 'next' || normalized === 'previous') {
